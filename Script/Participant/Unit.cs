@@ -15,7 +15,7 @@ public class Unit : Participant
         if(player.actionPoint > 0)
         {
             tileManager.SelectMoveType((int)transform.position.x, (int)transform.position.z, 1, RANGETYPE.RECT);
-            gameManager.state = _STATE.MOVE;
+            gameManager.action = ACTION.MOVE;
         }
     }
     public bool Move(Tile tile)
@@ -41,7 +41,7 @@ public class Unit : Participant
         if (player.actionPoint > 0)
         {
             tileManager.SelectAttackType((int)transform.position.x, (int)transform.position.z, 1, stat.GetRANGETYPE());
-            gameManager.state = _STATE.ATTACK;
+            gameManager.action = ACTION.ATTACK;
         }
             
     }
@@ -62,6 +62,7 @@ public class Unit : Participant
     {
         if(player.actionPoint < skillPoint)
         {
+            Debug.Log("포인트 부족");
             return;
         }
     }
@@ -95,9 +96,9 @@ public class Unit : Participant
         Destroy(gameObject);
     }
 
-    public override void init()
+    public override void init(int team)
     {
-        base.init();
+        base.init(team);
         tileManager = FindObjectOfType<TileManager>();
         gameManager = FindObjectOfType<GameManager>();  
         player = FindObjectOfType<Player>();

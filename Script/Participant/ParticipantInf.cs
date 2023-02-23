@@ -18,7 +18,7 @@ public class ParticipantInf : MonoBehaviour
         
     }
 
-    public void SetInfo(Participant participant)
+    public void SetInfo(Participant participant, Player player)
     {
         if(participant == null)
         {
@@ -27,11 +27,12 @@ public class ParticipantInf : MonoBehaviour
         }
 
         text.text = "이름 : " + participant.stat.GetName_() + "\n" + 
-            "체력 : " + participant.stat.GetOriginHp() + "/" + participant.hp + "\n" +
-            "마나 : " + participant.stat.GetOriginMp() + "/" + participant.mp + "\n" +
-            "공격력 : " + participant.ad + "\n" +
-            "주문력 : " + participant.ap + "\n" +
-            "방어력 : " + participant.adDefence + "\n" +
-            "마법방어력 : " + participant.apDefence;
+            "체력 : " + (int)participant.stat.GetOriginHp() + "/" + (int)participant.hp + "\n" +
+            "마나 : " + (int)participant.stat.GetOriginMp() + "/" + (int)participant.mp + "\n" +
+            "공격력 : " + (int)participant.ad + "\n" +
+            "주문력 : " + (int)participant.ap + "\n" +
+            "방어력 : " + (int)participant.adDefence + "\n" +
+            "마법방어력 : " + (int)participant.apDefence + "\n" +
+            "남은 행동력 : " + player.actionPoint;
     }    
 }

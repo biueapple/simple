@@ -37,8 +37,11 @@ public class AsiA : Character
     }
     public override void ViewSpecial()
     {
-        base.ViewSpecial();
+        if (player.actionPoint < skillPoint)
+        {
+            return;
+        }
         tileManager.SelectAttackType((int)transform.position.x, (int)transform.position.z, 2, RANGETYPE.RECT);
-        gameManager.state = _STATE.SPECIAL;
+        gameManager.action = ACTION.SPECIAL;
     }
 }

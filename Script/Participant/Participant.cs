@@ -15,6 +15,7 @@ public class Participant : MonoBehaviour
     public bool immortality;       //무적인가 아닌가
     public Transform modelParent;
     protected Transform model;
+    public int teamNum;
 
     void Start()
     {
@@ -85,7 +86,7 @@ public class Participant : MonoBehaviour
         }
     }
 
-    public virtual void init()
+    public virtual void init(int team)
     {
         hp = stat.GetOriginHp();
         mp = stat.GetOriginMp();
@@ -93,8 +94,17 @@ public class Participant : MonoBehaviour
         ap = stat.GetOriginAp();
         adDefence = stat.GetOriginAdDefence();
         apDefence = stat.OriginApDefence();
+        teamNum = team;
     }
 
+    public void Recovery(float f)
+    {
+        hp += f;
+        if(hp > stat.GetOriginHp())
+        {
+            hp = stat.GetOriginHp();
+        }
+    }
     public void GetAdDamage(float f)
     {
         Debug.Log($"받은 대미지{f * (100 / (100 + adDefence))}, 받기 전 체력 {hp}, 받은 후 체력 {hp - f * (100 / (100 + adDefence))}");

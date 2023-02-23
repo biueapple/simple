@@ -21,6 +21,17 @@ public class Enemy : Unit
         model = Instantiate(Resources.Load<GameObject>("OutlineCube/Cube_0.5"), Vector3.zero, Quaternion.identity, modelParent).transform;
     }
 
+    public override void Destruction()
+    {
+        if (immortality)
+            return;
+        if(gameManager.enemys.Contains(this))
+        {
+            gameManager.enemys.Remove(this);
+        }
+        Destroy(gameObject);
+    }
+
     public void FindWay()       //가장 가까운 플레이어의 캐릭터를 향해 한칸 전진 대각선으로도 이동 가능
     {
         if(gameManager.player.character.Count > 0)

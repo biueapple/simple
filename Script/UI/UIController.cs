@@ -67,6 +67,26 @@ public class UIController : MonoBehaviour
         }
         return default(T);
     }
+    public T GetGraphicRay<T>(bool b)
+    {
+        results.Clear();
+
+        m_ped.position = Input.mousePosition;
+
+        m_gr.Raycast(m_ped, results);
+
+        if (results.Count > 0)
+        {
+            for(int i = 0; i < results.Count; i++)
+            {
+                if (results[i].gameObject.transform.GetComponent<T>() != null)
+                {
+                    return results[i].gameObject.GetComponent<T>();
+                }
+            }
+        }
+        return default(T);
+    }
 
     public void ListSwap<T>(List<T> list, int index1, int index2)
     {

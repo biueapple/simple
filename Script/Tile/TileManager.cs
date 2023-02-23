@@ -37,7 +37,7 @@ public class TileManager : MonoBehaviour
     }
 
 
-    public Enemy CreateEnemy(int x,int z, string c_name)                 //unit이 아니라 enemy라는 스크립트를 하나 만들어야 할거같기도
+    public Enemy CreateEnemy(int x,int z, string c_name, int team)                 //enemy 만들기
     {
         if (x < 0 || z < 0)
             return null;
@@ -50,13 +50,13 @@ public class TileManager : MonoBehaviour
         }
 
         Enemy enemy = Instantiate(Resources.Load<Enemy>("Enemy/" + c_name));
-        enemy.init();
+        enemy.init(team);
         enemy.CreateModel();
         tiles[x, z].Pile(enemy);
         return enemy;
     }
 
-    public Character CreateCharacter(int x,int z, string c_name)        //이거 안씀 만들어진거 모델을 만들고 init,pile하는 방법으로 바꿀듯
+    public Character CreateCharacter(int x,int z, string c_name, int team)        //이거 안씀 만들어진거 모델을 만들고 init,pile하는 방법으로 바꿀듯
     {
         if (x < 0 || z < 0)
             return null;
@@ -69,12 +69,12 @@ public class TileManager : MonoBehaviour
         }
 
         Character character = Instantiate(Resources.Load<Character>("Character/" + c_name));
-        character.init();
+        character.init(team);
         tiles[x, z].Pile(character);
         return character;
     }
 
-    public Participant CreateParticipant(int x,int z, string p_name)
+    public Participant CreateParticipant(int x,int z, string p_name, int team)
     {
         if (x < 0 || z < 0)
             return null;
@@ -87,12 +87,48 @@ public class TileManager : MonoBehaviour
         }
 
         Participant participant = Instantiate(Resources.Load<Participant>("Barricade/" + p_name));
-        participant.init();
+        participant.init(team);
         participant.CreateModel();
         tiles[x, z].Pile(participant);
         return participant;
     }
 
+    public void SelectParticpant(Participant participant)
+    {
+        ClearTile();
+
+        for (int i = 0; i < tiles.GetLength(0); i++)
+        {
+            for (int j = 0; j < tiles.GetLength(1); j++)
+            {
+                if (tiles[i, j].GetParticipant() != null)
+                {
+                    if (tiles[i, j].GetParticipant() == participant)
+                    {
+                        AddTile(tiles[i, j], false, false);
+                    }
+                }
+            }
+        }
+    }
+    public void SelectTeamType(int teamNum)
+    {
+        ClearTile();
+
+        for (int i = 0; i < tiles.GetLength(0); i++)
+        {
+            for(int j = 0; j < tiles.GetLength(1); j++)
+            {
+                if (tiles[i,j].GetParticipant() != null)
+                {
+                    if (tiles[i,j].GetParticipant().teamNum == teamNum)
+                    {
+                        AddTile(tiles[i, j], false, false);
+                    }
+                }
+            }
+        }
+    }
     public void SelectMoveType(int x,int z,int size, RANGETYPE type)
     {
         switch(type)
@@ -117,7 +153,7 @@ public class TileManager : MonoBehaviour
                 break;
         }
     }
-    public bool FindParticipantType(Participant participant ,int x, int z, int size, RANGETYPE type)       //enemy가 플레이어를 찾을때 쓸거임 (공격할 수 있는 거리인지)     
+    public bool FindParticipantType(Participant participant ,int x, int z, int size, RANGETYPE type)       //enemy가 플레이어를 찾을때 쓸거임 (공격할 수 있는 거리인지)
     {
         switch (type)
         {
@@ -209,7 +245,7 @@ public class TileManager : MonoBehaviour
         tiles[x, z].DeselectTile();
     }
 
-    public void SelectRhombus(int x,int z, int size, bool immotal, bool move)     //마름모
+    private void SelectRhombus(int x,int z, int size, bool immotal, bool move)     //마름모
     {
         ClearTile();
         for (int i = -size; i <= size; i++)
@@ -230,7 +266,7 @@ public class TileManager : MonoBehaviour
             }
         }
     }
-    public void SelectRect(int x,int z,int size, bool immotal, bool move)        //네모
+    private void SelectRect(int x,int z,int size, bool immotal, bool move)        //네모
     {
         ClearTile();
         for(int i = -size; i <= size; i++)
@@ -271,17 +307,17 @@ public class TileManager : MonoBehaviour
         selectTile = null;
     }
 
-    public Participant AddTile(Tile tile,bool immortal, bool onside)
+    public Participant AddTile(Tile tile, bool immortal, bool canMove)       //selectTile에 add
     {
         bool ck1 = !immortal;
-        bool ck2 = !onside;
+        bool ck2 = !canMove;
 
         if(immortal)
         {
             if (!tile.Immortality())        //무적이 아니여야 true
                 ck1 = true;
         }
-        if(onside)
+        if(canMove)
         {
             if (tile.CanMove())             //위에 아무것도 없어야 true
                 ck2 = true;
@@ -341,7 +377,7 @@ public class TileManager : MonoBehaviour
 
         Camera.main.transform.position = new Vector3(size_width / 2 - 0.5f, Camera.main.transform.position.y, size_hieght / 2 - 0.5f);
     }
-    public void AddTile(int x, int z)
+    public void AddTile(int x, int z)           //타일을 그냥 더 만들어라
     {
         Tile[,] tile = new Tile[size_width + x, size_hieght + z];
 
