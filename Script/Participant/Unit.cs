@@ -10,7 +10,7 @@ public class Unit : Participant
     protected GameManager gameManager;
     public int skillPoint;
 
-    public virtual void ViewMove()
+    public virtual void ViewMove()      //이동 범위 표시
     {
         if(player.actionPoint > 0)
         {
@@ -18,7 +18,7 @@ public class Unit : Participant
             gameManager.action = ACTION.MOVE;
         }
     }
-    public bool Move(Tile tile)
+    public bool Move(Tile tile)         //이동
     {
         if(tile == null)
         {
@@ -36,7 +36,7 @@ public class Unit : Participant
             return false;
         }
     }
-    public virtual void ViewAttack()
+    public virtual void ViewAttack()        //공격 범위 표시
     {
         if (player.actionPoint > 0)
         {
@@ -45,11 +45,11 @@ public class Unit : Participant
         }
             
     }
-    public bool Attack(Tile tile)
+    public bool Attack(Tile tile)           //공격 효과
     {
         if(tile.GetParticipant() != null)
         {
-            if(!tile.Immortality())
+            if(!tile.Immortality() && tile.GetParticipant().teamNum != teamNum)
             {
                 tile.GetParticipant().GetAdDamage(ad);
                 return true;
@@ -58,15 +58,14 @@ public class Unit : Participant
 
         return false;
     }
-    public virtual void ViewSpecial()
+    public virtual void ViewSpecial()           //스킬 범위 override 반드시 해야함 base.ViewSpecial()해도 조건 리턴이 안됌 그냥 복붙하고 내용 써야함
     {
         if(player.actionPoint < skillPoint)
         {
-            Debug.Log("포인트 부족");
             return;
         }
     }
-    public virtual bool Special(Tile tile)
+    public virtual bool Special(Tile tile)      //스킬 효과 override 반드시 해야함
     {
         return false;
     }
@@ -83,7 +82,7 @@ public class Unit : Participant
         Destroy(gameObject);
     }
 
-    public override void Destruction()
+    public override void Destruction()      //불멸(immortality)이 아니라면 삭제 보통 이걸 사용 (Enemy는 override해서 gameManager에 enemys List에 remove 해야함)
     {
         if (GetComponent<Character>() != null)
         {
@@ -96,7 +95,7 @@ public class Unit : Participant
         Destroy(gameObject);
     }
 
-    public override void init(int team)
+    public override void init(int team)     
     {
         base.init(team);
         tileManager = FindObjectOfType<TileManager>();

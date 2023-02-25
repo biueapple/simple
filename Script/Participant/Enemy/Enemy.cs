@@ -16,12 +16,13 @@ public class Enemy : Unit
         
     }
 
-    public override void CreateModel()
+    public override void CreateModel()      //원래는 0.7cube인데 너무 커서 0.5로 override
     {
         model = Instantiate(Resources.Load<GameObject>("OutlineCube/Cube_0.5"), Vector3.zero, Quaternion.identity, modelParent).transform;
+        model.GetComponent<Renderer>().materials[1].color = color;
     }
 
-    public override void Destruction()
+    public override void Destruction()      //gameManager에 있는 enemys List에 remove도 해줘야함
     {
         if (immortality)
             return;
@@ -32,7 +33,7 @@ public class Enemy : Unit
         Destroy(gameObject);
     }
 
-    public void FindWay()       //가장 가까운 플레이어의 캐릭터를 향해 한칸 전진 대각선으로도 이동 가능
+    public void FindWay()       //가장 가까운 플레이어의 캐릭터를 향해 한칸 전진 대각선으로도 이동 가능 (공격 가능한 범위면 공격)
     {
         if(gameManager.player.character.Count > 0)
         {

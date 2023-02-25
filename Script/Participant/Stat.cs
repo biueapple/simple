@@ -68,17 +68,6 @@ public class Stat : ScriptableObject
     }
 
     [SerializeField]
-    private float shield;
-    public float GetShield()
-    {
-        return shield;
-    }
-    public void SetShield(float f)
-    {
-        shield = f;
-    }
-
-    [SerializeField]
     private Sprite[] skillSprites;
     public Sprite[] GetSprites()
     {

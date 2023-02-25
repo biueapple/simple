@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     public List<Character> character;
     public Sprite card_Back;
 
-    public int actionPoint;
+    public int actionPoint;                 
 
 
     void Start()
@@ -21,12 +21,12 @@ public class Player : MonoBehaviour
         
     }
 
-    public void Restart()
+    public void Restart()                   //턴 시작할때 쓸거
     {
         actionPoint = 2;
     }
 
-    public void Init(Cards cards)
+    public void Init(Cards cards)           //무슨 캐릭터들을 가지고 있는지 그리고 그 캐릭터가 가진 카드들도 만들어서 덱에 넣어주기
     {
         for(int i = 0; i < character.Count; i++)
         {

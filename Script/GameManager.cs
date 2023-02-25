@@ -8,13 +8,13 @@ public enum _STATE
     NONE = 0,
     CHARACTER_SELECT,   //캐릭터를 고르는 곳
     POSITION_SELECT,    //캐릭터를 다 고르고 시작할 위치 고르는곳
-    INGAME,
+    INGAME,             
     
 }
 public enum ACTION
 {
     NONE = 0,
-    MOVE,
+    MOVE,               //
     ATTACK,
     SPECIAL,
     CARD,
@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
     private int posiSelect = 0;
 
     public Cards cards;
-    public GameObject Deck;
     void Start()
     {
         tileManager = FindObjectOfType<TileManager>();
@@ -92,7 +91,7 @@ public class GameManager : MonoBehaviour
 
     public void TrunStart()
     {
-        player.actionPoint = 2;
+        player.Restart();
         cards.Draw(2);
     }
 
@@ -185,7 +184,9 @@ public class GameManager : MonoBehaviour
         //손패 on
         cards.gameObject.SetActive(true);
         //덱 on
-        Deck.SetActive(true);
+        cards.t_Deck.gameObject.SetActive(true);
+        //버린패 on
+        cards.t_Abandon.gameObject.SetActive(true);
         //기본행동버튼들 on
         orderButtons[0].transform.parent.gameObject.SetActive(true);
         //캐릭터 정보 on
@@ -233,6 +234,7 @@ public class GameManager : MonoBehaviour
         TileLeftClick();        //타일을 클릭해서 유닛의 정보를 볼 수 있음
         TileRightClick();       //오른쪽 클릭으로 선택된 타일이나 액션을 취소할 수 있음
         CardLeftClick();        //카드를 클릭해서 사용할 수 있음
+
         if(enemys.Count <= 0)
         {
             GameInit();
@@ -335,7 +337,7 @@ public class GameManager : MonoBehaviour
                 j++;
             }
         }
-    }
+    }       //캐릭터의 자리를 다시 고르는 함수            //GameInit()
 
     private void CreateEnemy(int min, int max)
     {
@@ -438,9 +440,9 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            Cards card = uIController.GetGraphicRay<Cards>();
+            Image image = uIController.GetGraphicRay<Image>();
 
-            if (cards.CardUp(card))
+            if (cards.CardUp(image, player))
             {
                 action = ACTION.CARD;
                 cards.usingCard.ImpactView(tileManager);
