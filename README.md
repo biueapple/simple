@@ -20,11 +20,6 @@
 
 카드를 버리면서 기본 행동이 가능하다.
 
-
-
- Participant -> Unit ->  Character  
-\\Barricade\\\\\Enemy\\\\
-      
   
   처음 생각했던건 다 완성함
   
